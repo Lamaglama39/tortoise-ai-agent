@@ -1,6 +1,6 @@
 # Bedrock Agent - Tortoise Expert
 resource "aws_bedrockagent_agent" "tortoise_expert" {
-  agent_name              = "tortoise-expert-agent"
+  agent_name              = "${var.project_name}-agent"
   agent_resource_role_arn = aws_iam_role.bedrock_agent.arn
   foundation_model        = var.foundation_model_id
 

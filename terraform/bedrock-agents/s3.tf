@@ -2,7 +2,7 @@
 # S3 Bucket for source documents
 # =============================================================================
 resource "aws_s3_bucket" "documents" {
-  bucket        = "${var.project_name}-agents-documents"
+  bucket        = "${var.project_name}-documents"
   force_destroy = true
 }
 
@@ -16,7 +16,7 @@ resource "aws_s3_object" "documents_prefix" {
 # S3 Vectors
 # =============================================================================
 resource "aws_s3vectors_vector_bucket" "knowledge_vectors" {
-  vector_bucket_name = "${var.project_name}-agents-vectors"
+  vector_bucket_name = "${var.project_name}-vectors"
 }
 
 resource "aws_s3vectors_index" "knowledge_index" {
