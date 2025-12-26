@@ -8,9 +8,11 @@ S3 Vectors、Bedrock Knowledge Bases、Bedrock Agents、およびBedrock AgentCo
 
 ### Bedrock Agentsパターン
 
+![image](./image/bedrock-agents.png)
 
 ### Bedrock AgentCoreパターン
 
+![image](./image/bedrock-agent-core.png)
 
 ## 前提条件
 
