@@ -43,6 +43,14 @@ output "agent" {
   }
 }
 
+output "foundation_model" {
+  description = "Foundation model configuration for Knowledge Base queries"
+  value = {
+    id  = var.foundation_model_id
+    arn = "arn:aws:bedrock:${var.aws_region}:${data.aws_caller_identity.current.account_id}:inference-profile/${var.foundation_model_id}"
+  }
+}
+
 output "env_file" {
   description = "Environment variables for Python scripts (.env format)"
   value       = <<-EOT

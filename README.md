@@ -79,13 +79,15 @@ aws bedrock-agent list-ingestion-jobs --knowledge-base-id ${KB_ID} --data-source
 
 ```bash
 KB_ID=$(terraform output -json knowledge_base | jq -r '.id')
+MODEL_ARN=$(terraform output -json foundation_model | jq -r '.arn')
+
 aws bedrock-agent-runtime retrieve-and-generate \
-  --input '{"text": "What tortoise is recommended for beginners?"}' \
+  --input '{"text": "初心者におすすめのリクガメを教えてください。"}' \
   --retrieve-and-generate-configuration '{
     "type": "KNOWLEDGE_BASE",
     "knowledgeBaseConfiguration": {
       "knowledgeBaseId": "'${KB_ID}'",
-      "modelArn": "arn:aws:bedrock:ap-northeast-1::inference-profile/apac.anthropic.claude-3-5-sonnet-20241022-v2:0"
+      "modelArn": "'${MODEL_ARN}'"
     }
   }'
 ```
@@ -93,12 +95,11 @@ aws bedrock-agent-runtime retrieve-and-generate \
 ### A-5. Pythonスクリプトでエージェントを呼び出す
 
 ```bash
-cd scripts
-terraform output -raw env_file > .env
+terraform output -raw env_file > scripts/.env && cd scripts
 python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
 
 # エージェントに質問
-python invoke_agent.py "What tortoise is recommended for beginners?"
+python invoke_agent.py "初心者におすすめのリクガメを教えてください。"
 
 # インタラクティブモード
 python invoke_agent.py -i
@@ -157,7 +158,7 @@ docker push ${ECR_URL}:latest
 ### B-5. Runtime & Endpointをデプロイ
 
 ```bash
-cd ..
+cd ../
 terraform apply -var="agentcore_runtime_image_tag=latest"
 ```
 
@@ -167,7 +168,7 @@ terraform apply -var="agentcore_runtime_image_tag=latest"
 RUNTIME_ARN=$(terraform output -json agentcore_runtime | jq -r '.runtime_arn')
 aws bedrock-agentcore invoke-agent-runtime \
   --agent-runtime-arn ${RUNTIME_ARN} \
-  --payload fileb://<(echo '{"prompt": "What tortoise is recommended for beginners?"}') \
+  --payload fileb://<(echo '{"prompt": "初心者におすすめのリクガメを教えてください。"}') \
   --content-type application/json \
   /dev/stdout | jq -r '.response'
 ```
